@@ -102,6 +102,14 @@
       "unit": "kg",
       "threshold": 10,
       "lastUpdated": "2026-04-26T00:00:00.000Z"
+    },
+    {
+      "id": "item-1777230871950",
+      "name": "Tea Leaves",
+      "currentStock": 40,
+      "unit": "kg",
+      "threshold": 20,
+      "lastUpdated": "2026-04-26T19:14:31.950Z"
     }
   ],
   "salesRecords": []
