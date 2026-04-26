@@ -1,0 +1,108 @@
+{
+  "csvFormats": [
+    {
+      "id": "1",
+      "name": "Standard Format",
+      "columns": {
+        "itemName": "Item",
+        "quantity": "Quantity",
+        "date": "Date"
+      }
+    }
+  ],
+  "ingredientMappings": [
+    {
+      "saleItem": "Chocolate Cake",
+      "ingredients": [
+        {
+          "ingredientName": "Flour",
+          "quantityUsed": 0.5,
+          "unit": "kg"
+        },
+        {
+          "ingredientName": "Sugar",
+          "quantityUsed": 0.3,
+          "unit": "kg"
+        },
+        {
+          "ingredientName": "Eggs",
+          "quantityUsed": 4,
+          "unit": "units"
+        },
+        {
+          "ingredientName": "Butter",
+          "quantityUsed": 0.2,
+          "unit": "kg"
+        }
+      ]
+    },
+    {
+      "saleItem": "Vanilla Cake",
+      "ingredients": [
+        {
+          "ingredientName": "Flour",
+          "quantityUsed": 0.4,
+          "unit": "kg"
+        },
+        {
+          "ingredientName": "Sugar",
+          "quantityUsed": 0.25,
+          "unit": "kg"
+        },
+        {
+          "ingredientName": "Milk",
+          "quantityUsed": 0.5,
+          "unit": "L"
+        },
+        {
+          "ingredientName": "Eggs",
+          "quantityUsed": 3,
+          "unit": "units"
+        }
+      ]
+    }
+  ],
+  "inventoryItems": [
+    {
+      "id": "1",
+      "name": "Flour",
+      "currentStock": 15,
+      "unit": "kg",
+      "threshold": 20,
+      "lastUpdated": "2026-04-26T19:11:57.035Z"
+    },
+    {
+      "id": "2",
+      "name": "Sugar",
+      "currentStock": 30,
+      "unit": "kg",
+      "threshold": 15,
+      "lastUpdated": "2026-04-26T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Milk",
+      "currentStock": 40,
+      "unit": "L",
+      "threshold": 25,
+      "lastUpdated": "2026-04-26T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Eggs",
+      "currentStock": 200,
+      "unit": "units",
+      "threshold": 100,
+      "lastUpdated": "2026-04-26T00:00:00.000Z"
+    },
+    {
+      "id": "5",
+      "name": "Butter",
+      "currentStock": 15,
+      "unit": "kg",
+      "threshold": 10,
+      "lastUpdated": "2026-04-26T00:00:00.000Z"
+    }
+  ],
+  "salesRecords": []
+}

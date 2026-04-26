@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { fetchInventoryData, saveInventoryData } from './inventory-api';
 
 // Types
 export interface CSVFormat {
@@ -66,113 +67,125 @@ interface InventoryContextType {
 
 const InventoryContext = createContext<InventoryContextType | undefined>(undefined);
 
-// Sample data
-const sampleCSVFormats: CSVFormat[] = [
-  {
-    id: '1',
-    name: 'Standard Format',
-    columns: {
-      itemName: 'Item',
-      quantity: 'Quantity',
-      date: 'Date',
-    },
-  },
-];
-
-const sampleInventoryItems: InventoryItem[] = [
-  { id: '1', name: 'Flour', currentStock: 50, unit: 'kg', threshold: 20, lastUpdated: new Date().toISOString() },
-  { id: '2', name: 'Sugar', currentStock: 30, unit: 'kg', threshold: 15, lastUpdated: new Date().toISOString() },
-  { id: '3', name: 'Milk', currentStock: 40, unit: 'L', threshold: 25, lastUpdated: new Date().toISOString() },
-  { id: '4', name: 'Eggs', currentStock: 200, unit: 'units', threshold: 100, lastUpdated: new Date().toISOString() },
-  { id: '5', name: 'Butter', currentStock: 15, unit: 'kg', threshold: 10, lastUpdated: new Date().toISOString() },
-];
-
-const sampleIngredientMappings: IngredientMapping[] = [
-  {
-    saleItem: 'Chocolate Cake',
-    ingredients: [
-      { ingredientName: 'Flour', quantityUsed: 0.5, unit: 'kg' },
-      { ingredientName: 'Sugar', quantityUsed: 0.3, unit: 'kg' },
-      { ingredientName: 'Eggs', quantityUsed: 4, unit: 'units' },
-      { ingredientName: 'Butter', quantityUsed: 0.2, unit: 'kg' },
-    ],
-  },
-  {
-    saleItem: 'Vanilla Cake',
-    ingredients: [
-      { ingredientName: 'Flour', quantityUsed: 0.4, unit: 'kg' },
-      { ingredientName: 'Sugar', quantityUsed: 0.25, unit: 'kg' },
-      { ingredientName: 'Milk', quantityUsed: 0.5, unit: 'L' },
-      { ingredientName: 'Eggs', quantityUsed: 3, unit: 'units' },
-    ],
-  },
-];
 
 export function InventoryProvider({ children }: { children: ReactNode }) {
-  const [csvFormats, setCSVFormats] = useState<CSVFormat[]>(sampleCSVFormats);
-  const [ingredientMappings, setIngredientMappings] = useState<IngredientMapping[]>(sampleIngredientMappings);
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(sampleInventoryItems);
+  const [csvFormats, setCSVFormats] = useState<CSVFormat[]>([]);
+  const [ingredientMappings, setIngredientMappings] = useState<IngredientMapping[]>([]);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [salesRecords, setSalesRecords] = useState<SalesRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Load data from backend on mount
+  useEffect(() => {
+    fetchInventoryData()
+      .then(data => {
+        setCSVFormats(data.csvFormats || []);
+        setIngredientMappings(data.ingredientMappings || []);
+        setInventoryItems(data.inventoryItems || []);
+        setSalesRecords(data.salesRecords || []);
+        setLoading(false);
+      })
+      .catch(e => {
+        setError('Failed to load data from backend.');
+        setLoading(false);
+      });
+  }, []);
+
+  // Save all data to backend
+  const persist = (next: Partial<{
+    csvFormats: CSVFormat[];
+    ingredientMappings: IngredientMapping[];
+    inventoryItems: InventoryItem[];
+    salesRecords: SalesRecord[];
+  }>) => {
+    const data = {
+      csvFormats: next.csvFormats ?? csvFormats,
+      ingredientMappings: next.ingredientMappings ?? ingredientMappings,
+      inventoryItems: next.inventoryItems ?? inventoryItems,
+      salesRecords: next.salesRecords ?? salesRecords,
+    };
+    saveInventoryData(data).catch(() => {
+      setError('Failed to save data to backend.');
+    });
+  };
   // CSV Format management
   const addCSVFormat = (format: CSVFormat) => {
-    setCSVFormats([...csvFormats, format]);
+    const updated = [...csvFormats, format];
+    setCSVFormats(updated);
+    persist({ csvFormats: updated });
   };
 
   const updateCSVFormat = (id: string, format: CSVFormat) => {
-    setCSVFormats(csvFormats.map(f => f.id === id ? format : f));
+    const updated = csvFormats.map(f => f.id === id ? format : f);
+    setCSVFormats(updated);
+    persist({ csvFormats: updated });
   };
 
   const deleteCSVFormat = (id: string) => {
-    setCSVFormats(csvFormats.filter(f => f.id !== id));
+    const updated = csvFormats.filter(f => f.id !== id);
+    setCSVFormats(updated);
+    persist({ csvFormats: updated });
   };
 
   // Ingredient Mapping management
   const addIngredientMapping = (mapping: IngredientMapping) => {
-    setIngredientMappings([...ingredientMappings, mapping]);
+    const updated = [...ingredientMappings, mapping];
+    setIngredientMappings(updated);
+    persist({ ingredientMappings: updated });
   };
 
   const updateIngredientMapping = (saleItem: string, mapping: IngredientMapping) => {
-    setIngredientMappings(ingredientMappings.map(m => m.saleItem === saleItem ? mapping : m));
+    const updated = ingredientMappings.map(m => m.saleItem === saleItem ? mapping : m);
+    setIngredientMappings(updated);
+    persist({ ingredientMappings: updated });
   };
 
   const deleteIngredientMapping = (saleItem: string) => {
-    setIngredientMappings(ingredientMappings.filter(m => m.saleItem !== saleItem));
+    const updated = ingredientMappings.filter(m => m.saleItem !== saleItem);
+    setIngredientMappings(updated);
+    persist({ ingredientMappings: updated });
   };
 
   // Inventory Item management
   const addInventoryItem = (item: InventoryItem) => {
-    setInventoryItems([...inventoryItems, item]);
+    const updated = [...inventoryItems, item];
+    setInventoryItems(updated);
+    persist({ inventoryItems: updated });
   };
 
   const updateInventoryItem = (id: string, item: InventoryItem) => {
-    setInventoryItems(inventoryItems.map(i => i.id === id ? item : i));
+    const updated = inventoryItems.map(i => i.id === id ? item : i);
+    setInventoryItems(updated);
+    persist({ inventoryItems: updated });
   };
 
   const deleteInventoryItem = (id: string) => {
-    setInventoryItems(inventoryItems.filter(i => i.id !== id));
+    const updated = inventoryItems.filter(i => i.id !== id);
+    setInventoryItems(updated);
+    persist({ inventoryItems: updated });
   };
 
   // Sales Records management
   const addSalesRecords = (records: SalesRecord[]) => {
-    setSalesRecords([...salesRecords, ...records]);
+    const updated = [...salesRecords, ...records];
+    setSalesRecords(updated);
+    persist({ salesRecords: updated });
   };
 
   const clearSalesRecords = () => {
     setSalesRecords([]);
+    persist({ salesRecords: [] });
   };
 
   // Process sales data to update inventory
   const processSalesData = (records: SalesRecord[]) => {
     const updatedInventory = [...inventoryItems];
-    
     records.forEach(sale => {
       const mapping = ingredientMappings.find(m => m.saleItem === sale.itemName);
-      
       if (mapping) {
         mapping.ingredients.forEach(ingredient => {
           const inventoryItem = updatedInventory.find(i => i.name === ingredient.ingredientName);
-          
           if (inventoryItem) {
             const totalUsed = ingredient.quantityUsed * sale.quantity;
             inventoryItem.currentStock = Math.max(0, inventoryItem.currentStock - totalUsed);
@@ -181,10 +194,14 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
         });
       }
     });
-    
     setInventoryItems(updatedInventory);
-    addSalesRecords(records);
+    const updatedSales = [...salesRecords, ...records];
+    setSalesRecords(updatedSales);
+    persist({ inventoryItems: updatedInventory, salesRecords: updatedSales });
   };
+
+  if (loading) return <div>Loading inventory data...</div>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
 
   return (
     <InventoryContext.Provider
