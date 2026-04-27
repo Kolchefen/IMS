@@ -6,7 +6,8 @@ import {
   Edit, 
   ShoppingCart, 
   FileText,
-  Package
+  Package,
+  RefreshCcw
 } from 'lucide-react';
 
 export default function Root() {
@@ -16,8 +17,9 @@ export default function Root() {
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/configuration', label: 'Configuration', icon: Settings },
     { path: '/manual-update', label: 'Manual Update', icon: Edit },
-    { path: '/purchase-manifest', label: 'Purchase Manifest', icon: ShoppingCart },
+    { path: '/manifest-report', label: 'Manifest Report', icon: ShoppingCart },
     { path: '/inventory-report', label: 'Inventory Report', icon: FileText },
+    { path: '/restore-inventory', label: 'Restore Inventory', icon: RefreshCcw },
   ];
   
   const isActive = (path: string) => {

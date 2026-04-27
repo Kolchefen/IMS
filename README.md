@@ -1,8 +1,22 @@
 # Inventory Management Tool
 
-This is a code bundle for Inventory Management Tool. The original project is available at https://www.figma.com/design/YPIbuPraBkfIGtAUjEEaI9/Inventory-Management-Tool.
+This is a project bundle for Inventory Management Tool for Software Analysis and Design.
 
-## Running the code
+## Running the project
+
+You will need to run the persistent backend and the front end.
+
+### Running the backend
+ 
+cd into `./backend`
+
+Run `npm i` to install the dependencies.
+
+run `run start`
+
+### Running the front end
+
+cd to the root of the project
 
 Run `npm i` to install the dependencies.
 

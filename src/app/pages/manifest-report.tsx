@@ -7,7 +7,7 @@ import { ShoppingCart, Download, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { Toaster } from '../components/ui/sonner';
 
-export default function PurchaseManifest() {
+export default function ManifestReport() {
   const { inventoryItems } = useInventory();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   
@@ -67,13 +67,13 @@ export default function PurchaseManifest() {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `purchase-manifest-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `manifest-report-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
     
-    toast.success('Purchase manifest exported successfully');
+    toast.success('Manifest Report exported successfully');
   };
   
   const exportToPDF = () => {
@@ -95,7 +95,7 @@ export default function PurchaseManifest() {
       <Toaster />
       
       <div className="mb-8">
-        <h1 className="text-3xl mb-2">Purchase Manifest</h1>
+        <h1 className="text-3xl mb-2">Manifest Report</h1>
         <p className="text-gray-600">Generate purchase orders for items below threshold</p>
       </div>
       
@@ -139,7 +139,7 @@ export default function PurchaseManifest() {
             <div>
               <CardTitle>Items to Purchase</CardTitle>
               <CardDescription>
-                Select items to include in your purchase manifest
+                Select items to include in your Manifest Report
               </CardDescription>
             </div>
             <div className="flex gap-2">
