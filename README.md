@@ -12,7 +12,7 @@ cd into `./backend`
 
 Run `npm i` to install the dependencies.
 
-run `run start`
+run `npm run start`
 
 ### Running the front end
 

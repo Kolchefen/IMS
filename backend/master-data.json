@@ -66,18 +66,18 @@
     {
       "id": "1",
       "name": "Flour",
-      "currentStock": 15,
+      "currentStock": 5,
       "unit": "kg",
       "threshold": 20,
-      "lastUpdated": "2026-04-26T19:11:57.035Z"
+      "lastUpdated": "2026-05-06T18:11:22.841Z"
     },
     {
       "id": "2",
       "name": "Sugar",
-      "currentStock": 30,
+      "currentStock": 35,
       "unit": "kg",
       "threshold": 15,
-      "lastUpdated": "2026-04-26T00:00:00.000Z"
+      "lastUpdated": "2026-05-06T18:11:09.964Z"
     },
     {
       "id": "3",
